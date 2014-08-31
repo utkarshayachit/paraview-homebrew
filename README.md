@@ -1,4 +1,4 @@
-# paraview-homebrew: Homebrew formula for installing ParaView
+# Homebrew formula for installing ParaView
 
 **EXPERIMENTAL + UNDER DEVELOPMENT**
 
