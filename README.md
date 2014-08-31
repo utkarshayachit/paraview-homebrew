@@ -1,4 +1,4 @@
-# paraview-homebrew
+# paraview-homebrew: Homebrew formula for installing ParaView
 
 **EXPERIMENTAL**  
 **UNDER DEVELOPMENT**
@@ -16,7 +16,6 @@ You may need to add the following taps for dependencies:
 
     brew tap homebrew/science
     
-
 
 ## TODO
 
