@@ -1,15 +1,13 @@
 require 'formula'
 
-# Documentation: https://github.com/Homebrew/homebrew/wiki/Formula-Cookbook
-#                /usr/local/Library/Contributions/example-formula.rb
-# PLEASE REMOVE ALL GENERATED COMMENTS BEFORE SUBMITTING YOUR PULL REQUEST!
-
 class Paraview < Formula
+  # Currently, this is a head-only formula. Once 4.2 is release,
+  # we'll add 'version' and 'url' fields.
+
   homepage 'http://paraview.org'
-#  url 'http://paraview.org/files/v4.1/ParaView-v4.1.0-RC2-source.tar.gz'
-  url "git://paraview.org/ParaView.git", :using => :git, :tag => "master"
-  sha1 'f68af3d4e85290224fc5e844ab1fd346210501ab'
-  version "devel"
+
+  # 'head' release URL
+  head "git://paraview.org/ParaView.git", :using => :git, :tag => "master"
 
   depends_on 'cmake' => :build
 
