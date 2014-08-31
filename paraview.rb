@@ -16,9 +16,11 @@ class Paraview < Formula
   # Core dependencies. If any of these are off, they are OFF!
   depends_on :mpi => [:cc, :cxx, :optional] # Is optional. MPI with `cc` and `cxx`.
   depends_on :python => :recommended
-  # depends_on 'matplotlib' => [:python, :recommended]
   depends_on 'qt' => :recommended
   depends_on 'ffmpeg' => :recommended
+  depends_on 'cgns' => :recommended
+  depends_on 'matplotlib' => [:python, :recommended]
+  depends_on 'numpy' =>[:python, :recommended]
 
   # Builtin dependencies. If any of these are off, we build our own.
   depends_on :libpng => :recommended
@@ -28,8 +30,6 @@ class Paraview < Formula
   depends_on 'libtiff' => :optional
   depends_on 'boost' => :recommended
   depends_on 'hdf5' => :recommended
-
-  depends_on 'cgns' => [:recommended]
 
   def install
     args = std_cmake_args + %W[
@@ -47,13 +47,6 @@ class Paraview < Formula
       args << '-DPARAVIEW_BUILD_QT_GUI:BOOL=ON'
     else
       args << '-DPARAVIEW_BUILD_QT_GUI:BOOL=OFF'
-    end
-
-    # enable/disable Python support
-    if build.with? :python
-      args << '-DPARAVIEW_ENABLE_PYTHON:BOOL=ON'
-    else
-      args << '-DPARAVIEW_ENABLE_PYTHON:BOOL=OFF'
     end
 
     # enable/disable MPI support
@@ -76,32 +69,25 @@ class Paraview < Formula
     args << '-DVTK_USE_SYSTEM_PNG=ON' if build.with? :libpng
     args << '-DVTK_USE_SYSTEM_TIFF=ON' if build.with? 'libtiff'
     args << '-DPARAVIEW_USE_VISITBRIDGE:BOOL=ON' if build.with? 'boost'
-
+    args << '-DVISIT_BUILD_READER_CGNS:BOOL=ON' if build.with? 'cgns'
     mkdir 'build' do
-      python do
-        # The make and make install have to be inside the python do loop
-        # because the PYTHONPATH is defined by this block (and not outside)
-        system 'cmake', '..', *args
-        system 'make'
-        system 'make', 'install'
+      # enable/disable Python support
+      if build.with? "python"
+        args << '-DPARAVIEW_ENABLE_PYTHON:BOOL=ON'
+        # CMake picks up the system's python dylib, even if we have a brewed one.
+        args << "-DPYTHON_LIBRARY='#{%x(python-config --prefix).chomp}/lib/libpython2.7.dylib'"
+      else
+        args << '-DPARAVIEW_ENABLE_PYTHON:BOOL=OFF'
       end
-      if not python then
-        system 'cmake', '..', *args
-        system 'make'
-        system 'make', 'install'
-      end
+      args << ".."
+
+      system 'cmake', *args
+      system 'make'
+      system 'make', 'install'
     end
   end
 
-  #test do
-  #  # `test do` will create, run in and delete a temporary directory.
-  #  #
-  #  # This test will fail and we won't accept that! It's enough to just replace
-  #  # "false" with the main program this formula installs, but it'd be nice if you
-  #  # were more thorough. Run the test with `brew test ParaView-v`.
-  #  #
-  #  # The installed folder is not in the path, so use the entire path to any
-  #  # executables being tested: `system "#{bin}/program", "--version"`.
-  #  system "false"
-  #end
+  test do
+    system "#{prefix}/paraview.app/Contents/MacOS/paraview --version"
+  end
 end
