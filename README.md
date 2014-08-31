@@ -1,12 +1,12 @@
-paraview-homebrew
-=================
+# paraview-homebrew
 
-== EXPERIMENTAL = UNDER DEVELOPMENT ===
+**EXPERIMENTAL**  
+**UNDER DEVELOPMENT**
 
 Homebrew build scripts for ParaView.
 
-This is just a start. Works on 10.9.
-Next, need to add support for options, SDK etc.
+
+## Install
 
 Install as follows:
 
@@ -18,11 +18,10 @@ You may need to add the following taps for dependencies:
     
 
 
-TODO
-----
+## TODO
 
-* CGNS
 * NumPy, Matplotlib
-* SDK
-* command-line tools only
+* Add support installing development files (SDK)
+* Add support to install commandline tools only
+* Add support to install without Qt, Python and/or MPI
 
