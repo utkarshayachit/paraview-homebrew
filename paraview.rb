@@ -19,8 +19,9 @@ class Paraview < Formula
   depends_on 'qt' => :recommended
   depends_on 'ffmpeg' => :recommended
   depends_on 'cgns' => :recommended
-  depends_on 'matplotlib' => [:python, :recommended]
-  depends_on 'numpy' =>[:python, :recommended]
+  
+  #depends_on 'matplotlib' => [:python, :recommended]
+  #depends_on 'numpy' =>[:python, :recommended]
 
   # Builtin dependencies. If any of these are off, we build our own.
   depends_on :libpng => :recommended
