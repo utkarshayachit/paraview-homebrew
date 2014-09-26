@@ -1,9 +1,9 @@
 require 'formula'
 
 class Paraview < Formula
-  # Currently, this is a head-only formula. Once 4.2 is release,
-  # we'll add 'version' and 'url' fields.
-
+  url "http://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v4.2&type=source&os=all&downloadFile=ParaView-v4.2.0-source.tar.gz"
+  version "4.2.0"
+  sha1 "77cf0e3804eb7bb91d2d94b10bd470f4"
   homepage 'http://paraview.org'
 
   # 'head' release URL
@@ -17,9 +17,11 @@ class Paraview < Formula
   depends_on 'qt' => :recommended
   depends_on 'ffmpeg' => :recommended
   depends_on 'cgns' => :recommended
-  
-  #depends_on 'matplotlib' => [:python, :recommended]
-  #depends_on 'numpy' =>[:python, :recommended]
+  depends_on 'boost' => :recommended
+
+  # Python module dependencies  
+  depends_on 'matplotlib' => [:python, :optional]
+  depends_on 'numpy' =>[:python, :optional]
 
   # Builtin dependencies. If any of these are off, we build our own.
   depends_on :libpng => :recommended
@@ -27,7 +29,6 @@ class Paraview < Formula
   depends_on :fontconfig => :optional
   depends_on 'jpeg' => :optional
   depends_on 'libtiff' => :optional
-  depends_on 'boost' => :recommended
   depends_on 'hdf5' => :recommended
 
   def install
@@ -48,20 +49,8 @@ class Paraview < Formula
       args << '-DPARAVIEW_BUILD_QT_GUI:BOOL=OFF'
     end
 
-    # enable/disable MPI support
-    if build.with? :mpi
-      args << '-DPARAVIEW_USE_MPI:BOOL=ON'
-    else
-      args << '-DPARAVIEW_USE_MPI:BOOL=OFF'
-    end
-
-    # enable/disable FFMPEG support
-    if build.with? 'ffmpeg'
-      args << '-DPARAVIEW_ENABLE_FFMPEG:BOOL=ON'
-    else
-      args << '-DPARAVIEW_ENABLE_FFMPEG:BOOL=OFF'
-    end
-
+    args << '-DPARAVIEW_USE_MPI:BOOL=ON' if build.with? :mpi
+    args << '-DPARAVIEW_ENABLE_FFMPEG:BOOL=ON' if build.with? 'ffmpeg'
     args << '-DVTK_USE_SYSTEM_FREETYPE=ON' if build.with? :freetype
     args << '-DVTK_USE_SYSTEM_HDF5=ON' if build.with? 'hdf5'
     args << '-DVTK_USE_SYSTEM_JPEG=ON' if build.with? 'jpeg'
