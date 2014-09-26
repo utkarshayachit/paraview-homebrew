@@ -21,7 +21,6 @@ class Paraview < Formula
 
   # Python module dependencies  
   depends_on 'matplotlib' => [:python, :optional]
-  depends_on 'numpy' =>[:python, :optional]
 
   # Builtin dependencies. If any of these are off, we build our own.
   depends_on :libpng => :recommended
